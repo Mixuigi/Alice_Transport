@@ -18,8 +18,6 @@ def time_manager(request):
         }
     }
     if request['request']['original_utterance']:
-        response['response']['text'] = 'Позже...'
-    else:
         Person(alice_user_id=request['session']['user']['user_id'])
         if Person:
             times = get_time(Person.city, Person.type, Person.number, Person.direction, Person.stop)
@@ -27,6 +25,8 @@ def time_manager(request):
         else:
             print(request['session']['user']['user_id'])
             response['response']['text'] = 'Пользователь не зарегистрирован'
+    else:
+        response['response']['text'] = 'Позже...'
     return Response(response)
 
 def get_time(city, type, number, direction, stop):
