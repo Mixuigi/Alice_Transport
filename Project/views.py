@@ -9,18 +9,25 @@ from rest_framework.response import Response
 
 @api_view(['Post'])
 def time_manager(request):
-    request = json.loads(request)
+    request = request.data
     response = {
         'session': request['session'],
         'version': request['version'],
         'response': {
-            'end_session': True
+            'end_session': False
         }
     }
-    response['response']['text'] = '40'
-    get_time('brest', 'autobus', '40', "Гвардейская%20-%20Газоаппарат", 'Гвардейская', response, request.json, )
-    return json.dumps(response)
-
+    if request['request']['original_utterance']:
+        response['response']['text'] = 'Позже...'
+    else:
+        Person(alice_user_id=request['session']['user']['user_id'])
+        if Person:
+            times = get_time(Person.city, Person.type, Person.number, Person.direction, Person.stop)
+            response['response']['text'] = f'Ближайший автобус будет в {times[0]}, а следующий в {times[1]}'
+        else:
+            print(request['session']['user']['user_id'])
+            response['response']['text'] = 'Пользователь не зарегистрирован'
+    return Response(response)
 
 def get_time(city, type, number, direction, stop):
     url = f'https://kogda.by/routes/{city}/{type}/{number}/{direction}/{stop}'
