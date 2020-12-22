@@ -20,18 +20,20 @@ def time_manager(request):
     if request['request']['original_utterance']:
         user = request['session'].get('user', False)
         if user:
-            Person(alice_user_id=request['session']['user']['user_id'])
-            if Person:
-                times = get_time(Person.city, Person.type, Person.number, Person.direction, Person.stop)
-                response['response']['text'] = f'Ближайший автобус будет в {times[0]}, а следующий в {times[1]}'
-            else:
-                print(request['session']['user']['user_id'])
-                response['response']['text'] = 'Пользователь не зарегистрирован'
+            try:
+                person = Person.objects.get(alice_user_id=request['session']['user']['user_id'])
+            except:
+                response['response'][
+                    'text'] = f'Пользователь не зарегистрирован ваш id {request["session"]["user"]["user_id"]}'
+            times = get_time(person.city, person.type, person.number, person.direction, person.stop)
+            response['response']['text'] = f'Ближайший автобус будет в {times[0]}, а следующий в {times[1]}'
+
         else:
             response['response']['text'] = 'Нету id пользователя'
     else:
         response['response']['text'] = 'Позже...'
     return Response(response)
+
 
 def get_time(city, type, number, direction, stop):
     url = f'https://kogda.by/routes/{city}/{type}/{number}/{direction}/{stop}'
