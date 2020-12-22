@@ -9,4 +9,5 @@ pytz==2020.4
 sqlparse==0.4.1
 static3==0.7.0
 whitenoise==5.2.0
-
+djangorestframework
+requests
