@@ -12,3 +12,4 @@ whitenoise==5.2.0
 djangorestframework
 requests
 bs4
+lxml
