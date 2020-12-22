@@ -23,13 +23,13 @@ def time_manager(request):
     if request['request']['original_utterance']:
         user = request['session'].get('user', False)
         if user:
-            try:
-                person = Person.objects.get(alice_user_id=request['session']['user']['user_id'])
-                times = get_time(person.city, person.type, person.number, person.direction, person.stop)
-                response['response']['text'] = f'Ближайший автобус будет в {times[0]}, а следующий в {times[1]}'
-            except:
-                response['response'][
-                    'text'] = f'Пользователь не зарегистрирован ваш id {request["session"]["user"]["user_id"]}'
+            # try:
+            person = Person.objects.get(alice_user_id=request['session']['user']['user_id'])
+            times = get_time(person.city, person.type, person.number, person.direction, person.stop)
+            response['response']['text'] = f'Ближайший автобус будет в {times[0]}, а следующий в {times[1]}'
+            # except:
+            #     response['response'][
+            #         'text'] = f'Пользователь не зарегистрирован ваш id {request["session"]["user"]["user_id"]}'
         else:
             response['response']['text'] = 'Нету id пользователя'
     else:
