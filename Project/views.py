@@ -22,8 +22,9 @@ def time_manager(request):
         if user:
             try:
                 person = Person.objects.get(alice_user_id=request['session']['user']['user_id'])
+                response['response']['text'] = f'{person.city}, {person.type}, {person.number}, {person.direction}, {person.stop}'
                 times = get_time(person.city, person.type, person.number, person.direction, person.stop)
-                response['response']['text'] = f'Ближайший автобус будет в {times[0]}, а следующий в {times[1]}'
+                # response['response']['text'] = f'Ближайший автобус будет в {times[0]}, а следующий в {times[1]}'
             except:
                 response['response'][
                     'text'] = f'Пользователь не зарегистрирован ваш id {request["session"]["user"]["user_id"]}'
